@@ -46,48 +46,29 @@ rf_model = joblib.load("rf_model.pkl")
 st.markdown(
     """
     <style>
-    /* Background image */
-    body {
-        background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
-        background-size: cover;
-        background-attachment: fixed;
-    }
-
-    /* Main app container */
+    /* Main app background */
     .stApp {
-        background: rgba(0, 0, 0, 0.35);  /* lighter overlay for readability */
+        background: rgba(0, 0, 0, 0.35);
         padding: 20px;
         border-radius: 10px;
-        color: #ffffff;  /* default text color */
+        color: #ffffff;
     }
 
     /* Headings and labels */
-    h1, h2, h3, h4, h5, h6, label, .stTextInput label, .stNumberInput label, .stSlider label {
+    h1, h2, h3, h4, h5, h6, label {
         color: #ffffff !important;
     }
 
-    /* Inputs and sliders text */
-    input, .stNumberInput, .stSlider {
+    /* Inputs text color */
+    input {
         color: #ffffff !important;
         background-color: rgba(0,0,0,0.4) !important;
     }
 
-    /* Prediction panel / alert colors */
-    .alert-high {
-        color: #ff4b4b;
-        font-size: 24px;
-        font-weight: bold;
-    }
-    .alert-medium {
-        color: #ffd700;
-        font-size: 24px;
-        font-weight: bold;
-    }
-    .alert-low {
-        color: #00ff00;
-        font-size: 24px;
-        font-weight: bold;
-    }
+    /* Prediction alerts */
+    .alert-high { color: #ff4b4b; font-size: 24px; font-weight: bold; }
+    .alert-medium { color: #ffd700; font-size: 24px; font-weight: bold; }
+    .alert-low { color: #00ff00; font-size: 24px; font-weight: bold; }
 
     /* Right-side prediction panel */
     .prediction-panel {
@@ -99,7 +80,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 
 
 st.title("🌧 Rainfall Prediction System")
@@ -143,6 +123,7 @@ with col2:
             st.markdown(f"<p class='alert-low'>☀️ Light Rainfall</p>", unsafe_allow_html=True)
 
 st.markdown("<br><br><p style='color:white;'>Developed by Deepika Bantu | AI & Machine Learning</p>", unsafe_allow_html=True)
+
 
 
 
