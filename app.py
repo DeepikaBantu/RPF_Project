@@ -4,7 +4,7 @@ import joblib
 import numpy as np
 
 # -----------------------------
-# DOWNLOAD MODELS FROM GOOGLE DRIVE
+# DOWNLOAD MODELS FROM DRIVE
 # -----------------------------
 # XGBoost model
 xgb_url = "https://drive.google.com/uc?id=1oRs0MGL4KDxjf8mX31dtAjKMvRbUkatS"
@@ -30,11 +30,12 @@ st.markdown("""
     border-radius: 10px;
 }
 
-/* Main overlay for content */
+/* Main content overlay */
 .stApp {
-    background: transparent;  /* keep input area bright */
+    background: rgba(0,0,0,0.2);  /* very light overlay to prevent dimming */
+    padding: 15px;
+    border-radius: 10px;
     color: #ffffff;
-    padding: 0px;
 }
 
 /* Headings and labels */
@@ -45,7 +46,7 @@ h1, h2, h3, h4, h5, h6, label {
 /* Input text boxes */
 input {
     color: #ffffff !important;
-    background-color: rgba(0,0,0,0.25) !important;
+    background-color: rgba(0,0,0,0.3) !important;
 }
 
 /* Buttons styling */
@@ -56,17 +57,17 @@ input {
     font-weight: bold;
 }
 
-/* Prediction panel styling */
-.prediction-panel {
-    background-color: rgba(0,0,0,0.4);  /* slightly dark overlay */
-    padding: 20px;
-    border-radius: 10px;
-}
-
-/* Prediction alerts */
+/* Prediction alert styling */
 .alert-high { color: #ff4b4b; font-size: 24px; font-weight: bold; }
 .alert-medium { color: #ffd700; font-size: 24px; font-weight: bold; }
 .alert-low { color: #00ff00; font-size: 24px; font-weight: bold; }
+
+/* Prediction panel on right */
+.prediction-panel {
+    background-color: rgba(0,0,0,0.35);
+    padding: 15px;
+    border-radius: 10px;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -75,41 +76,35 @@ input {
 # -----------------------------
 st.title("Rainfall Prediction 🌦️")
 
-# Two columns: Inputs (left), Predictions (right)
-col1, col2 = st.columns([2, 1])
+# Input columns
+col1, col2 = st.columns([2, 1])  # inputs on left, predictions on right
 
 with col1:
-    st.header("Input Weather Data")
     temperature = st.number_input("Temperature (K)", min_value=250.0, max_value=320.0, value=300.0)
     windspeed = st.number_input("Wind Speed (m/s)", min_value=0.0, max_value=20.0, value=2.0)
     prev_rain = st.number_input("Yesterday's Rainfall (mm)", min_value=0.0, max_value=500.0, value=0.0)
-    predict_btn = st.button("Predict 🌧️")  # Explicit label
+    predict_btn = st.button("Predict 🌧️")  # explicit label
 
 with col2:
     st.markdown('<div class="prediction-panel">', unsafe_allow_html=True)
     if predict_btn:
-        # Prepare input array
+        # Prepare input
         X_input = np.array([[temperature, windspeed, prev_rain]])
-
-        # Predict with both models
         rf_pred = rf_model.predict(X_input)[0]
         xgb_pred = xgb_model.predict(X_input)[0]
 
         # Determine alert
-        max_pred = max(rf_pred, xgb_pred)
-        if max_pred < 1.0:
+        if max(rf_pred, xgb_pred) < 1.0:
             alert_class = "alert-low"
             alert_text = "☀️ Light Rainfall"
-        elif max_pred < 10.0:
+        elif max(rf_pred, xgb_pred) < 10.0:
             alert_class = "alert-medium"
             alert_text = "🌦️ Moderate Rainfall"
         else:
             alert_class = "alert-high"
             alert_text = "🌧️ Heavy Rainfall"
 
-        # Display predictions
         st.markdown(f"**Random Forest Prediction (mm):** {rf_pred:.3f}")
         st.markdown(f"**XGBoost Prediction (mm):** {xgb_pred:.3f}")
         st.markdown(f'<p class="{alert_class}">{alert_text}</p>', unsafe_allow_html=True)
-
     st.markdown('</div>', unsafe_allow_html=True)
