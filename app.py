@@ -4,8 +4,18 @@ import joblib
 import pandas as pd
 
 # Load trained models
-rf_model = joblib.load("rf_model.pkl")
+import gdown
+import joblib
+
+# Download and load the XGBoost model
+xgb_url = "https://drive.google.com/uc?id=1oRs0MGL4KDxjf8mX31dtAjKMvRbUkatS"
+gdown.download(xgb_url, "xgb_model.pkl", quiet=False)
 xgb_model = joblib.load("xgb_model.pkl")
+
+# Download and load the Random Forest model
+rf_url = "https://drive.google.com/uc?id=1AprnF_FHSmSHQL-tAvAZu5AMLD8MK-Ae"
+gdown.download(rf_url, "rf_model.pkl", quiet=False)
+rf_model = joblib.load("rf_model.pkl")
 
 # Page setup
 st.set_page_config(page_title="Rainfall Prediction System 🌧", layout="wide")
@@ -86,3 +96,4 @@ with col2:
             st.markdown(f"<p class='alert-low'>☀️ Light Rainfall</p>", unsafe_allow_html=True)
 
 st.markdown("<br><br><p style='color:white;'>Developed by Deepika Bantu | AI & Machine Learning</p>", unsafe_allow_html=True)
+
