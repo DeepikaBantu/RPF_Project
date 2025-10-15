@@ -23,17 +23,22 @@ st.set_page_config(page_title="Rainfall Prediction System 🌧", layout="wide")
 # Background and styling
 st.markdown(
     """
+    st.markdown(
+    """
     <style>
     body {
         background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
         background-size: cover;
         background-attachment: fixed;
-        color: white;
     }
     .stApp {
-        background: rgba(0,0,0,0.6);
+        background: rgba(0, 0, 0, 0.6);
         padding: 20px;
         border-radius: 10px;
+        color: #ffffff;  /* Make default text white */
+    }
+    .stHeader, h1, h2, h3, h4, h5, h6, label, .css-1aumxhk {
+        color: #ffffff !important;  /* Force headings and labels to white */
     }
     .alert-high {
         color: #ff4b4b;
@@ -96,4 +101,5 @@ with col2:
             st.markdown(f"<p class='alert-low'>☀️ Light Rainfall</p>", unsafe_allow_html=True)
 
 st.markdown("<br><br><p style='color:white;'>Developed by Deepika Bantu | AI & Machine Learning</p>", unsafe_allow_html=True)
+
 
