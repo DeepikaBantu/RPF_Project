@@ -23,23 +23,56 @@ st.set_page_config(page_title="Rainfall Prediction System 🌧", layout="wide")
 # Background and styling
 import streamlit as st
 
+import streamlit as st
+import gdown
+import joblib
+
+# -----------------------------
+# DOWNLOAD MODELS FROM DRIVE
+# -----------------------------
+# XGBoost model
+xgb_url = "https://drive.google.com/uc?id=1oRs0MGL4KDxjf8mX31dtAjKMvRbUkatS"
+gdown.download(xgb_url, "xgb_model.pkl", quiet=False)
+xgb_model = joblib.load("xgb_model.pkl")
+
+# Random Forest model
+rf_url = "https://drive.google.com/uc?id=1AprnF_FHSmSHQL-tAvAZu5AMLD8MK-Ae"
+gdown.download(rf_url, "rf_model.pkl", quiet=False)
+rf_model = joblib.load("rf_model.pkl")
+
+# -----------------------------
+# CUSTOM CSS FOR BRIGHT TEXT
+# -----------------------------
 st.markdown(
     """
     <style>
+    /* Background image */
     body {
         background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
         background-size: cover;
         background-attachment: fixed;
     }
+
+    /* Main app container */
     .stApp {
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.35);  /* lighter overlay for readability */
         padding: 20px;
         border-radius: 10px;
-        color: #ffffff;  /* Make default text white */
+        color: #ffffff;  /* default text color */
     }
-    h1, h2, h3, h4, h5, h6, label, .css-1aumxhk {
-        color: #ffffff !important;  /* Force headings and labels to white */
+
+    /* Headings and labels */
+    h1, h2, h3, h4, h5, h6, label, .stTextInput label, .stNumberInput label, .stSlider label {
+        color: #ffffff !important;
     }
+
+    /* Inputs and sliders text */
+    input, .stNumberInput, .stSlider {
+        color: #ffffff !important;
+        background-color: rgba(0,0,0,0.4) !important;
+    }
+
+    /* Prediction panel / alert colors */
     .alert-high {
         color: #ff4b4b;
         font-size: 24px;
@@ -55,10 +88,18 @@ st.markdown(
         font-size: 24px;
         font-weight: bold;
     }
+
+    /* Right-side prediction panel */
+    .prediction-panel {
+        background-color: rgba(0,0,0,0.5);
+        padding: 15px;
+        border-radius: 10px;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 
 st.title("🌧 Rainfall Prediction System")
@@ -102,6 +143,7 @@ with col2:
             st.markdown(f"<p class='alert-low'>☀️ Light Rainfall</p>", unsafe_allow_html=True)
 
 st.markdown("<br><br><p style='color:white;'>Developed by Deepika Bantu | AI & Machine Learning</p>", unsafe_allow_html=True)
+
 
 
 
