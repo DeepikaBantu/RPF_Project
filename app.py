@@ -1,7 +1,7 @@
 import streamlit as st
-import gdown
 import joblib
 import numpy as np
+import gdown
 
 # -----------------------------
 # DOWNLOAD MODELS FROM GOOGLE DRIVE
@@ -30,9 +30,9 @@ st.markdown("""
     border-radius: 10px;
 }
 
-/* Main overlay for content */
+/* Main content overlay */
 .stApp {
-    background: transparent;  /* keep input area bright */
+    background: transparent;
     color: #ffffff;
     padding: 0px;
 }
@@ -45,7 +45,7 @@ h1, h2, h3, h4, h5, h6, label {
 /* Input text boxes */
 input {
     color: #ffffff !important;
-    background-color: rgba(0,0,0,0.25) !important;
+    background-color: rgba(0,0,0,0.15) !important;
 }
 
 /* Buttons styling */
@@ -58,7 +58,7 @@ input {
 
 /* Prediction panel styling */
 .prediction-panel {
-    background-color: rgba(0,0,0,0.4);  /* slightly dark overlay */
+    background-color: rgba(0,0,0,0.4);
     padding: 20px;
     border-radius: 10px;
 }
@@ -85,9 +85,6 @@ with col1:
     prev_rain = st.number_input("Yesterday's Rainfall (mm)", min_value=0.0, max_value=500.0, value=0.0)
     predict_btn = st.button("Predict 🌧️")  # Explicit label
 
-# -----------------------------
-# Prediction and Alerts
-# -----------------------------
 with col2:
     st.markdown('<div class="prediction-panel">', unsafe_allow_html=True)
     if predict_btn:
@@ -116,4 +113,3 @@ with col2:
         st.markdown(f'<p class="{alert_class}">{alert_text}</p>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
-
