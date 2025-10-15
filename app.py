@@ -46,10 +46,19 @@ rf_model = joblib.load("rf_model.pkl")
 st.markdown(
     """
     <style>
-    /* Main app background */
-    .stApp {
-        background: rgba(0, 0, 0, 0.35);
+    /* Container for entire app */
+    .stApp > div:first-child {
+        background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-attachment: fixed;
         padding: 20px;
+        border-radius: 10px;
+    }
+
+    /* Main overlay for content */
+    .stApp {
+        background: rgba(0,0,0,0.25);  /* lower opacity for less dimming */
+        padding: 15px;
         border-radius: 10px;
         color: #ffffff;
     }
@@ -59,20 +68,20 @@ st.markdown(
         color: #ffffff !important;
     }
 
-    /* Inputs text color */
+    /* Input text boxes */
     input {
         color: #ffffff !important;
-        background-color: rgba(0,0,0,0.4) !important;
+        background-color: rgba(0,0,0,0.3) !important;
     }
 
-    /* Prediction alerts */
+    /* Prediction alert styling */
     .alert-high { color: #ff4b4b; font-size: 24px; font-weight: bold; }
     .alert-medium { color: #ffd700; font-size: 24px; font-weight: bold; }
     .alert-low { color: #00ff00; font-size: 24px; font-weight: bold; }
 
-    /* Right-side prediction panel */
+    /* Prediction panel on right */
     .prediction-panel {
-        background-color: rgba(0,0,0,0.5);
+        background-color: rgba(0,0,0,0.4);
         padding: 15px;
         border-radius: 10px;
     }
@@ -80,7 +89,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 
 st.title("🌧 Rainfall Prediction System")
 
@@ -123,6 +131,7 @@ with col2:
             st.markdown(f"<p class='alert-low'>☀️ Light Rainfall</p>", unsafe_allow_html=True)
 
 st.markdown("<br><br><p style='color:white;'>Developed by Deepika Bantu | AI & Machine Learning</p>", unsafe_allow_html=True)
+
 
 
 
