@@ -21,9 +21,9 @@ rf_model = joblib.load("rf_model.pkl")
 st.set_page_config(page_title="Rainfall Prediction System 🌧", layout="wide")
 
 # Background and styling
+import streamlit as st
+
 st.markdown(
-    """
-    st.markdown(
     """
     <style>
     body {
@@ -37,7 +37,7 @@ st.markdown(
         border-radius: 10px;
         color: #ffffff;  /* Make default text white */
     }
-    .stHeader, h1, h2, h3, h4, h5, h6, label, .css-1aumxhk {
+    h1, h2, h3, h4, h5, h6, label, .css-1aumxhk {
         color: #ffffff !important;  /* Force headings and labels to white */
     }
     .alert-high {
@@ -59,6 +59,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 st.title("🌧 Rainfall Prediction System")
 
@@ -101,5 +102,6 @@ with col2:
             st.markdown(f"<p class='alert-low'>☀️ Light Rainfall</p>", unsafe_allow_html=True)
 
 st.markdown("<br><br><p style='color:white;'>Developed by Deepika Bantu | AI & Machine Learning</p>", unsafe_allow_html=True)
+
 
 
