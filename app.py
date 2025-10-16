@@ -7,6 +7,28 @@ import requests
 # -----------------------------
 # DOWNLOAD MODELS
 # -----------------------------
+import gdown
+import joblib
+import gzip
+import os
+
+# RF model compressed
+rf_gz_url = "https://drive.google.com/uc?id=1VU-BxyOFibyls7aP4R8rcWRL4WS9iiwh"
+rf_gz_path = "rf_model_compressed.pkl.gz"
+rf_pkl_path = "rf_model.pkl"
+
+# Download compressed file if not exists
+if not os.path.exists(rf_gz_path):
+    gdown.download(rf_gz_url, rf_gz_path, quiet=False)
+
+# Uncompress
+if not os.path.exists(rf_pkl_path):
+    with gzip.open(rf_gz_path, "rb") as f_in:
+        with open(rf_pkl_path, "wb") as f_out:
+            f_out.write(f_in.read())
+
+# Load RF model
+rf_model = joblib.load(rf_pkl_path)
 
 # --- XGBoost model from GitHub ---
 xgb_url = "https://raw.githubusercontent.com/DeepikaBantu/RPF_Project/main/xgb_model.pkl"
@@ -130,3 +152,4 @@ with col2:
         st.markdown(f"**XGBoost Prediction (mm):** {xgb_pred:.3f}")
         st.markdown(f'<p class="{alert_class}">{alert_text}</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+
