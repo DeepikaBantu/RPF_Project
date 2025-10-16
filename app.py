@@ -2,25 +2,34 @@ import streamlit as st
 import joblib
 import numpy as np
 import requests
+import re
 
-# --- XGBoost model from GitHub ---
+# --- XGBoost model (from GitHub) ---
 xgb_url = "https://raw.githubusercontent.com/DeepikaBantu/RPF_Project/main/xgb_model.pkl"
-xgb_model_path = "xgb_model.pkl"
-xgb_model = joblib.load(xgb_model_path)
+xgb_model = joblib.load("xgb_model.pkl")
 
-# --- Random Forest model from Google Drive (direct download link) ---
-rf_url = "https://drive.google.com/uc?export=download&id=1AprnF_FHSmSHQL-tAvAZu5AMLD8MK-Ae"
+# --- Random Forest model (from Google Drive) ---
+rf_id = "1AprnF_FHSmSHQL-tAvAZu5AMLD8MK-Ae"
+session = requests.Session()
+URL = "https://docs.google.com/uc?export=download"
+
+response = session.get(URL, params={'id': rf_id}, stream=True)
+confirm_token = None
+for key, value in response.cookies.items():
+    if key.startswith('download_warning'):
+        confirm_token = value
+
+if confirm_token:
+    params = {'id': rf_id, 'confirm': confirm_token}
+    response = session.get(URL, params=params, stream=True)
+
 rf_model_path = "rf_model.pkl"
+with open(rf_model_path, "wb") as f:
+    for chunk in response.iter_content(32768):
+        if chunk:
+            f.write(chunk)
 
-# Download from Drive manually using requests (Streamlit Cloud safe)
-try:
-    r = requests.get(rf_url, allow_redirects=True)
-    with open(rf_model_path, "wb") as f:
-        f.write(r.content)
-    rf_model = joblib.load(rf_model_path)
-except Exception as e:
-    st.error(f"Could not load RF model from Drive: {e}")
-    st.stop()
+rf_model = joblib.load(rf_model_path)
 
 # --- UI and styling ---
 st.markdown(
@@ -52,3 +61,4 @@ if st.button("Predict 🌧️"):
         st.markdown(f'<p class="alert-medium">🌦️ Moderate Rainfall ({rain_pred:.2f} mm)</p>', unsafe_allow_html=True)
     else:
         st.markdown(f'<p class="alert-high">🌧️ Heavy Rainfall ({rain_pred:.2f} mm) — Bring an Umbrella! ☂️</p>', unsafe_allow_html=True)
+
