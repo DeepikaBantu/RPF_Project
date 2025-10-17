@@ -1,6 +1,5 @@
 import streamlit as st
 import joblib
-import gzip
 import numpy as np
 import gdown
 import os
@@ -8,26 +7,20 @@ import os
 # -----------------------------
 # DOWNLOAD AND LOAD MODELS
 # -----------------------------
-
-# Google Drive model URLs
 rf_model_url = "https://drive.google.com/uc?id=1AprnF_FHSmSHQL-tAvAZu5AMLD8MK-Ae"
 xgb_model_url = "https://drive.google.com/uc?id=1oRs0MGL4KDxjf8mX31dtAjKMvRbUkatS"
 
-# Local model paths
 rf_model_path = "rf_model.pkl"
 xgb_model_path = "xgb_model.pkl"
 
-# Download RF model if not present
 if not os.path.exists(rf_model_path):
     st.info("🔽 Downloading Random Forest model...")
     gdown.download(rf_model_url, rf_model_path, quiet=False)
 
-# Download XGB model if not present
 if not os.path.exists(xgb_model_path):
     st.info("🔽 Downloading XGBoost model...")
     gdown.download(xgb_model_url, xgb_model_path, quiet=False)
 
-# Load models
 rf_model = joblib.load(rf_model_path)
 xgb_model = joblib.load(xgb_model_path)
 
@@ -36,46 +29,15 @@ xgb_model = joblib.load(xgb_model_path)
 # -----------------------------
 st.markdown("""
 <style>
-.stApp > div:first-child {
-    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
-    background-size: cover;
-    background-attachment: fixed;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.stApp {
-    background: rgba(0,0,0,0.2);
-    padding: 15px;
-    border-radius: 10px;
-    color: #ffffff;
-}
-
-h1, h2, h3, h4, h5, h6, label {
-    color: #ffffff !important;
-}
-
-input {
-    color: #ffffff !important;
-    background-color: rgba(0,0,0,0.3) !important;
-}
-
-.stButton>button {
-    color: #ffffff;
-    background-color: #4CAF50;
-    font-size: 18px;
-    font-weight: bold;
-}
-
+.stApp > div:first-child { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80'); background-size: cover; background-attachment: fixed; padding: 20px; border-radius: 10px; }
+.stApp { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; color: #ffffff; }
+h1, h2, h3, h4, h5, h6, label { color: #ffffff !important; }
+input { color: #ffffff !important; background-color: rgba(0,0,0,0.3) !important; }
+.stButton>button { color: #ffffff; background-color: #4CAF50; font-size: 18px; font-weight: bold; }
 .alert-high { color: #ff4b4b; font-size: 24px; font-weight: bold; }
 .alert-medium { color: #ffd700; font-size: 24px; font-weight: bold; }
 .alert-low { color: #00ff00; font-size: 24px; font-weight: bold; }
-
-.prediction-panel {
-    background-color: rgba(0,0,0,0.35);
-    padding: 15px;
-    border-radius: 10px;
-}
+.prediction-panel { background-color: rgba(0,0,0,0.35); padding: 15px; border-radius: 10px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -87,20 +49,25 @@ st.title("🌦️ Rainfall Prediction App")
 col1, col2 = st.columns([2, 1])
 
 with col1:
-    temperature = st.number_input("Temperature (K)", min_value=250.0, max_value=320.0, value=300.0)
-    windspeed = st.number_input("Wind Speed (m/s)", min_value=0.0, max_value=20.0, value=2.0)
-    prev_rain = st.number_input("Yesterday's Rainfall (mm)", min_value=0.0, max_value=500.0, value=0.0)
+    temperature = st.number_input("Temperature (K)", 250.0, 320.0, 300.0)
+    windspeed = st.number_input("Wind Speed (m/s)", 0.0, 20.0, 2.0)
+    humidity = st.number_input("Humidity (%)", 0.0, 100.0, 50.0)
+    pressure = st.number_input("Pressure (hPa)", 900.0, 1100.0, 1013.0)
+    cloud_cover = st.number_input("Cloud Cover (%)", 0.0, 100.0, 20.0)
+    dew_point = st.number_input("Dew Point (K)", 250.0, 320.0, 290.0)
+    visibility = st.number_input("Visibility (km)", 0.0, 50.0, 10.0)
+    prev_rain = st.number_input("Yesterday's Rainfall (mm)", 0.0, 500.0, 0.0)
     predict_btn = st.button("Predict 🌧️")
 
 with col2:
     st.markdown('<div class="prediction-panel">', unsafe_allow_html=True)
     if predict_btn:
-        X_input = np.array([[temperature, windspeed, prev_rain]])
+        X_input = np.array([[temperature, windspeed, humidity, pressure,
+                             cloud_cover, dew_point, visibility, prev_rain]])
 
         rf_pred = rf_model.predict(X_input)[0]
         xgb_pred = xgb_model.predict(X_input)[0]
 
-        # Determine alert
         max_pred = max(rf_pred, xgb_pred)
         if max_pred < 1.0:
             alert_class = "alert-low"
