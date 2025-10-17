@@ -51,19 +51,14 @@ col1, col2 = st.columns([2, 1])
 with col1:
     temperature = st.number_input("Temperature (K)", 250.0, 320.0, 300.0)
     windspeed = st.number_input("Wind Speed (m/s)", 0.0, 20.0, 2.0)
-    humidity = st.number_input("Humidity (%)", 0.0, 100.0, 50.0)
-    pressure = st.number_input("Pressure (hPa)", 900.0, 1100.0, 1013.0)
-    cloud_cover = st.number_input("Cloud Cover (%)", 0.0, 100.0, 20.0)
-    dew_point = st.number_input("Dew Point (K)", 250.0, 320.0, 290.0)
-    visibility = st.number_input("Visibility (km)", 0.0, 50.0, 10.0)
-    prev_rain = st.number_input("Yesterday's Rainfall (mm)", 0.0, 500.0, 0.0)
+    rain_prev1 = st.number_input("Yesterday's Rainfall (mm)", 0.0, 500.0, 0.0)
+    month = st.number_input("Month (1-12)", 1, 12, 1)
     predict_btn = st.button("Predict 🌧️")
 
 with col2:
     st.markdown('<div class="prediction-panel">', unsafe_allow_html=True)
     if predict_btn:
-        X_input = np.array([[temperature, windspeed, humidity, pressure,
-                             cloud_cover, dew_point, visibility, prev_rain]])
+        X_input = np.array([[temperature, windspeed, rain_prev1, month]])
 
         rf_pred = rf_model.predict(X_input)[0]
         xgb_pred = xgb_model.predict(X_input)[0]
