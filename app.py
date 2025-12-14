@@ -61,30 +61,34 @@ with col1:
 
 with col2:
     st.markdown('<div class="prediction-panel">', unsafe_allow_html=True)
-    if predict_btn:
-        # Create DataFrame with correct feature names
-        X_input = pd.DataFrame([[temperature, windspeed, rain_prev1, month]],
-                               columns=['temperature', 'windspeed', 'rain_prev1', 'month'])
 
-        # Predictions
+    if predict_btn:
+        X_input = pd.DataFrame(
+            [[temperature, windspeed, rain_prev1, month]],
+            columns=['temperature', 'windspeed', 'rain_prev1', 'month']
+        )
+
         rf_pred = rf_model.predict(X_input)[0]
         xgb_pred = xgb_model.predict(X_input)[0]
 
-        # Determine alert
         max_pred = max(rf_pred, xgb_pred)
-       if max_pred < 1.0:
-    alert_class = "alert-low"
-    alert_text = "☀️ Light Rainfall"
-elif max_pred < 5.0:
-    alert_class = "alert-medium"
-    alert_text = "🌦️ Moderate Rainfall"
-else:
-    alert_class = "alert-high"
-    alert_text = "🌧️ Heavy Rainfall — Bring an Umbrella!"
 
+        if max_pred < 1.0:
+            alert_class = "alert-low"
+            alert_text = "☀️ Light Rainfall"
+        elif max_pred < 5.0:
+            alert_class = "alert-medium"
+            alert_text = "🌦️ Moderate Rainfall"
+        else:
+            alert_class = "alert-high"
+            alert_text = "🌧️ Heavy Rainfall — Bring an Umbrella!"
 
         st.markdown(f"**Random Forest Prediction (mm):** {rf_pred:.3f}")
         st.markdown(f"**XGBoost Prediction (mm):** {xgb_pred:.3f}")
-        st.markdown(f'<p class="{alert_class}">{alert_text}</p>', unsafe_allow_html=True)
+        st.markdown(
+            f'<p class="{alert_class}">{alert_text}</p>',
+            unsafe_allow_html=True
+        )
+
     st.markdown('</div>', unsafe_allow_html=True)
 
