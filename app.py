@@ -73,7 +73,7 @@ with col2:
 
         max_pred = max(rf_pred, xgb_pred)
 
-       if max_pred < 1.0:
+        if max_pred < 1.0:
             alert_class = "alert-low"
             alert_text = "☀️ Light Rainfall"
         elif max_pred < 3.0:
