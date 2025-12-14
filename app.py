@@ -73,10 +73,10 @@ with col2:
 
         max_pred = max(rf_pred, xgb_pred)
 
-        if max_pred < 1.0:
+       if max_pred < 1.0:
             alert_class = "alert-low"
             alert_text = "☀️ Light Rainfall"
-        elif max_pred < 5.0:
+        elif max_pred < 3.0:
             alert_class = "alert-medium"
             alert_text = "🌦️ Moderate Rainfall"
         else:
@@ -91,4 +91,5 @@ with col2:
         )
 
     st.markdown('</div>', unsafe_allow_html=True)
+
 
