@@ -72,17 +72,19 @@ with col2:
 
         # Determine alert
         max_pred = max(rf_pred, xgb_pred)
-        if max_pred < 1.0:
-            alert_class = "alert-low"
-            alert_text = "☀️ Light Rainfall"
-        elif max_pred < 10.0:
-            alert_class = "alert-medium"
-            alert_text = "🌦️ Moderate Rainfall"
-        else:
-            alert_class = "alert-high"
-            alert_text = "🌧️ Heavy Rainfall — Bring an Umbrella!"
+       if max_pred < 1.0:
+    alert_class = "alert-low"
+    alert_text = "☀️ Light Rainfall"
+elif max_pred < 5.0:
+    alert_class = "alert-medium"
+    alert_text = "🌦️ Moderate Rainfall"
+else:
+    alert_class = "alert-high"
+    alert_text = "🌧️ Heavy Rainfall — Bring an Umbrella!"
+
 
         st.markdown(f"**Random Forest Prediction (mm):** {rf_pred:.3f}")
         st.markdown(f"**XGBoost Prediction (mm):** {xgb_pred:.3f}")
         st.markdown(f'<p class="{alert_class}">{alert_text}</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+
