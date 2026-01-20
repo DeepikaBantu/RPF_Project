@@ -28,26 +28,8 @@ xgb_model = joblib.load(xgb_model_path)
 # -----------------------------
 # CUSTOM STYLING
 # -----------------------------
-st.markdown("""
-<style>
-.stApp > div:first-child { 
-    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80'); 
-    background-size: cover; background-attachment: fixed; padding: 20px; border-radius: 10px; 
-}
-.stApp { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; color: #ffffff; }
-h1, h2, h3, h4, h5, h6, label { color: #ffffff !important; }
-input { color: #ffffff !important; background-color: rgba(0,0,0,0.3) !important; }
-.stButton>button { color: #ffffff; background-color: #4CAF50; font-size: 18px; font-weight: bold; }
-.alert-high { color: #ff4b4b; font-size: 36px; font-weight: bold; }
-.alert-medium { color: #ffd700; font-size: 36px; font-weight: bold; }
-.alert-low { color: #00ff00; font-size: 36px; font-weight: bold; }
-.prediction-panel { background-color: rgba(0,0,0,0.35); padding: 15px; border-radius: 10px; }
-</style>
-""", unsafe_allow_html=True)
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
 
-# -----------------------------
-# APP LAYOUT
-# -----------------------------
 st.title("🌦️ Rainfall Prediction App")
 
 col1, col2 = st.columns([2, 1])
@@ -83,13 +65,18 @@ with col2:
             alert_class = "alert-high"
             alert_text = "🌧️ Heavy Rainfall — Bring an Umbrella!"
 
-        st.markdown(f"**Random Forest Prediction (mm):** {rf_pred:.3f}")
-        st.markdown(f"**XGBoost Prediction (mm):** {xgb_pred:.3f}")
+        st.markdown(f'<p class="pred-text">Random Forest Prediction (mm): {rf_pred:.3f}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p class="pred-text">XGBoost Prediction (mm): {xgb_pred:.3f}</p>', unsafe_allow_html=True)
         st.markdown(
             f'<p class="{alert_class}">{alert_text}</p>',
             unsafe_allow_html=True
         )
 
     st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
+# -----------------------------
+# APP LAYOUT
+# -----------------------------
 
 
