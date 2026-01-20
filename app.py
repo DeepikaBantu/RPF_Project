@@ -28,28 +28,34 @@ xgb_model = joblib.load(xgb_model_path)
 # -----------------------------
 # APP TITLE
 # -----------------------------
-st.title("🌦️ Rainfall Prediction App")
+# -----------------------------
+# APP TITLE
+# -----------------------------
+st.markdown("<h1 style='text-align:center;'>🌦️ Rainfall Prediction App</h1>", unsafe_allow_html=True)
 
-col1, col2 = st.columns([2, 1])
+col1, col2 = st.columns([1.2, 1])
 
 with col1:
-    st.markdown("### 🌡️ Temperature (Kelvin)")
-    temperature = st.number_input("", 250.0, 320.0, 300.0)
+    st.markdown('<div class="input-panel">', unsafe_allow_html=True)
 
-    st.markdown("### 💨 Wind Speed (m/s)")
-    windspeed = st.number_input("", 0.0, 20.0, 2.0)
+    st.markdown("🌡️ <span class='lbl'>Temperature (Kelvin)</span>", unsafe_allow_html=True)
+    temperature = st.number_input("", 250.0, 320.0, 300.0, key="t")
 
-    st.markdown("### 🌧️ Yesterday's Rainfall (mm)")
-    rain_prev1 = st.number_input("", 0.0, 500.0, 0.0)
+    st.markdown("💨 <span class='lbl'>Wind Speed (m/s)</span>", unsafe_allow_html=True)
+    windspeed = st.number_input("", 0.0, 20.0, 5.0, key="w")
 
-    st.markdown("### 📅 Month (1–12)")
-    month = st.number_input("", 1, 12, 1)
+    st.markdown("🌧️ <span class='lbl'>Yesterday's Rainfall (mm)</span>", unsafe_allow_html=True)
+    rain_prev1 = st.number_input("", 0.0, 500.0, 100.0, key="r")
+
+    st.markdown("📅 <span class='lbl'>Month (1–12)</span>", unsafe_allow_html=True)
+    month = st.number_input("", 1, 12, 7, key="m")
 
     predict_btn = st.button("🔮 Predict Rainfall")
 
+    st.markdown("</div>", unsafe_allow_html=True)
+
 with col2:
-    result_text = ""
-    bg_dynamic = ""
+    st.markdown('<div class="result-panel">', unsafe_allow_html=True)
 
     if predict_btn:
         X_input = pd.DataFrame(
@@ -61,7 +67,7 @@ with col2:
         xgb_pred = xgb_model.predict(X_input)[0]
         max_pred = max(rf_pred, xgb_pred)
 
-        # 🔹 Dynamic background based on rainfall
+        # Background selection
         if max_pred < 1.0:
             result_text = "☀️ Light Rainfall"
             bg_dynamic = "https://d2u0ktu8omkpf6.cloudfront.net/e0036137a0c69370e3e4909d4cd47cbe621cab64cbe866b9.jpg"
@@ -77,49 +83,70 @@ with col2:
         st.markdown("### 📊 Prediction Results")
         st.markdown(f"**Random Forest Prediction (mm):** {rf_pred:.3f}")
         st.markdown(f"**XGBoost Prediction (mm):** {xgb_pred:.3f}")
-        st.markdown(f"**{result_text}**")
+        st.markdown(f"<h3 style='color:#00ffcc;'>{result_text}</h3>", unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # -----------------------------
-# CUSTOM STYLING WITH BACKGROUND
+# CUSTOM STYLING (NO SCROLL + HIGH CONTRAST)
 # -----------------------------
 st.markdown(f"""
 <style>
+
+/* Remove scroll bar */
+body {{
+    overflow: hidden;
+}}
+
 /* Dynamic Background */
 .stApp > div:first-child {{
     background-image: url('{bg_dynamic}');
     background-size: cover;
+    background-position: center;
     background-attachment: fixed;
-    padding: 20px;
-    border-radius: 10px;
-}}
-/* Dark overlay */
-.stApp {{
-    background: rgba(0,0,0,0.35);
-    padding: 20px;
-    border-radius: 10px;
+    height: 100vh;
+    padding: 10px;
 }}
 
-/* Big Title */
-h1 {{
-    color: white !important;
-    font-size: 48px !important;
-    text-align: center;
+/* Dark overlay panel */
+.input-panel {{
+    background: rgba(0,0,0,0.55);
+    padding: 18px;
+    border-radius: 15px;
 }}
 
-/* Big Labels */
-label {{
-    color: white !important;
-    font-size: 24px !important;
+.result-panel {{
+    background: rgba(0,0,0,0.55);
+    padding: 18px;
+    border-radius: 15px;
+    color: white;
+}}
+
+/* Labels */
+.lbl {{
+    color: #ffffff;
+    font-size: 22px;
     font-weight: bold;
+    text-shadow: 2px 2px 5px black;
+}}
+
+/* Title */
+h1 {{
+    color: white;
+    font-size: 46px;
+    text-shadow: 3px 3px 6px black;
 }}
 
 /* Button */
 .stButton>button {{
+    width: 100%;
     font-size: 22px;
     font-weight: bold;
     background-color: #4CAF50;
     color: white;
+    border-radius: 10px;
 }}
 
 </style>
 """, unsafe_allow_html=True)
+
