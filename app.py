@@ -1,17 +1,40 @@
 import streamlit as st
 import numpy as np
+import pandas as pd
 import joblib
-
-# Load models
-rf_model = joblib.load("rf_model.pkl")
-xgb_model = joblib.load("xgb_model.pkl")
+import gdown
+import os
 
 st.set_page_config(page_title="Rainfall Prediction App", layout="wide")
 
-# Default background (Light Rain)
+# -----------------------------
+# DOWNLOAD MODELS AUTOMATICALLY
+# -----------------------------
+rf_model_url = "https://drive.google.com/uc?id=1AprnF_FHSmSHQL-tAvAZu5AMLD8MK-Ae"
+xgb_model_url = "https://drive.google.com/uc?id=1oRs0MGL4KDxjf8mX31dtAjKMvRbUkatS"
+
+rf_model_path = "rf_model.pkl"
+xgb_model_path = "xgb_model.pkl"
+
+if not os.path.exists(rf_model_path):
+    st.info("🔽 Downloading Random Forest model...")
+    gdown.download(rf_model_url, rf_model_path, quiet=False)
+
+if not os.path.exists(xgb_model_path):
+    st.info("🔽 Downloading XGBoost model...")
+    gdown.download(xgb_model_url, xgb_model_path, quiet=False)
+
+rf_model = joblib.load(rf_model_path)
+xgb_model = joblib.load(xgb_model_path)
+
+# -----------------------------
+# DEFAULT BACKGROUND (LIGHT)
+# -----------------------------
 bg_dynamic = "https://d2u0ktu8omkpf6.cloudfront.net/e0036137a0c69370e3e4909d4cd47cbe621cab64cbe866b9.jpg"
 
-# CSS for background, no scroll, high contrast labels
+# -----------------------------
+# CUSTOM CSS (NO SCROLL + CLEAR LABELS)
+# -----------------------------
 st.markdown(
     f"""
     <style>
@@ -29,7 +52,7 @@ st.markdown(
         font-size: 22px !important;
         font-weight: bold !important;
         color: white !important;
-        background-color: rgba(0,0,0,0.6);
+        background-color: rgba(0,0,0,0.7);
         padding: 6px 10px;
         border-radius: 8px;
     }}
@@ -37,26 +60,35 @@ st.markdown(
     h1 {{
         color: white;
         text-align: center;
-        background-color: rgba(0,0,0,0.6);
-        padding: 10px;
-        border-radius: 10px;
+        background-color: rgba(0,0,0,0.7);
+        padding: 12px;
+        border-radius: 12px;
     }}
 
     .result-box {{
         color: white;
         font-size: 22px;
         font-weight: bold;
-        background-color: rgba(0,0,0,0.6);
-        padding: 15px;
+        background-color: rgba(0,0,0,0.7);
+        padding: 18px;
+        border-radius: 12px;
+        margin-top: 15px;
+    }}
+
+    .stButton>button {{
+        font-size: 20px;
+        font-weight: bold;
+        padding: 10px 25px;
         border-radius: 10px;
-        margin-top: 10px;
     }}
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Title
+# -----------------------------
+# APP UI
+# -----------------------------
 st.markdown("<h1>🌧 Rainfall Prediction App</h1>", unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
@@ -68,19 +100,24 @@ with col1:
     month = st.number_input("📅 Month (1–12)", min_value=1, max_value=12, value=6)
 
 with col2:
-    st.markdown("<div class='result-box'>Prediction Results will appear here 👇</div>", unsafe_allow_html=True)
+    st.markdown("<div class='result-box'>Prediction results will appear here 👇</div>", unsafe_allow_html=True)
 
-# Predict button
+# -----------------------------
+# PREDICTION
+# -----------------------------
 if st.button("Predict 🌦"):
 
-    X = np.array([[temperature, wind_speed, yesterday_rain, month]])
+    X_input = pd.DataFrame(
+        [[temperature, wind_speed, yesterday_rain, month]],
+        columns=['temperature', 'windspeed', 'rain_prev1', 'month']
+    )
 
-    rf_pred = rf_model.predict(X)[0]
-    xgb_pred = xgb_model.predict(X)[0]
+    rf_pred = rf_model.predict(X_input)[0]
+    xgb_pred = xgb_model.predict(X_input)[0]
 
     max_pred = max(rf_pred, xgb_pred)
 
-    # Decide rainfall type + background
+    # Select background & label
     if max_pred < 1.0:
         rainfall_type = "🌤 Light Rainfall"
         bg_dynamic = "https://d2u0ktu8omkpf6.cloudfront.net/e0036137a0c69370e3e4909d4cd47cbe621cab64cbe866b9.jpg"
@@ -93,7 +130,7 @@ if st.button("Predict 🌦"):
         rainfall_type = "⛈ Heavy Rainfall"
         bg_dynamic = "https://pragativadi.com/wp-content/uploads/2025/06/IMD-Issues-Orange-Alert-Thunderstorm-Heavy-Rainfall-Likely-in-Odisha-Districts-Over-Next-Four-Days.jpg"
 
-    # Update background after prediction
+    # Change background after prediction
     st.markdown(
         f"""
         <style>
@@ -107,7 +144,7 @@ if st.button("Predict 🌦"):
         unsafe_allow_html=True
     )
 
-    # Show results
+    # Show output
     st.markdown(
         f"""
         <div class="result-box">
