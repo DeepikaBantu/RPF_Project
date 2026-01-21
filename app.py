@@ -47,7 +47,7 @@ html, body, [class*="css"] {{
     background-position: center;
 }}
 
-h1 {{
+h1 {
     color: white;
     text-align: center;
     font-size: 48px;
@@ -55,7 +55,9 @@ h1 {{
     background-color: rgba(0,0,0,0.75);
     padding: 15px;
     border-radius: 12px;
-}}
+    text-shadow: 2px 2px 6px black;
+}
+
 
 label {{
     font-size: 22px !important;
@@ -158,3 +160,4 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
