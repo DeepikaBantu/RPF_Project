@@ -40,13 +40,10 @@ with col1:
 
     st.markdown("🌡️ <span class='lbl'>Temperature (Kelvin)</span>", unsafe_allow_html=True)
     temperature = st.number_input("", 250.0, 320.0, 300.0, key="t")
-
     st.markdown("💨 <span class='lbl'>Wind Speed (m/s)</span>", unsafe_allow_html=True)
     windspeed = st.number_input("", 0.0, 20.0, 5.0, key="w")
-
     st.markdown("🌧️ <span class='lbl'>Yesterday's Rainfall (mm)</span>", unsafe_allow_html=True)
     rain_prev1 = st.number_input("", 0.0, 500.0, 100.0, key="r")
-
     st.markdown("📅 <span class='lbl'>Month (1–12)</span>", unsafe_allow_html=True)
     month = st.number_input("", 1, 12, 7, key="m")
 
@@ -149,4 +146,5 @@ h1 {{
 
 </style>
 """, unsafe_allow_html=True)
+
 
