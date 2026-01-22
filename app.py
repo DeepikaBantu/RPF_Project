@@ -253,21 +253,22 @@ if predict_btn:
 
     if st.session_state.predicted:
 
-    with col2:
-        result_placeholder.markdown(f"""
-        <div class="result-box">
-        🌲 Random Forest Prediction: {st.session_state.rf_pred:.2f} mm <br>
-        ⚡ XGBoost Prediction: {st.session_state.xgb_pred:.2f} mm <br><br>
-        👉 Final Result: <b>{st.session_state.rainfall_type}</b> <br><br>
-        💡 <b>Alert:</b> {st.session_state.message}
-        </div>
-        """, unsafe_allow_html=True)
+        with col2:
+            result_placeholder.markdown(f"""
+            <div class="result-box">
+            🌲 Random Forest Prediction: {st.session_state.rf_pred:.2f} mm <br>
+            ⚡ XGBoost Prediction: {st.session_state.xgb_pred:.2f} mm <br><br>
+            👉 Final Result: <b>{st.session_state.rainfall_type}</b> <br><br>
+            💡 <b>Alert:</b> {st.session_state.message}
+            </div>
+            """, unsafe_allow_html=True)
 
-    st.markdown(rain_animation(st.session_state.rain_effect), unsafe_allow_html=True)
+        st.markdown(rain_animation(st.session_state.rain_effect), unsafe_allow_html=True)
 
-    st.audio(st.session_state.rain_sound, format="audio/mp3", autoplay=True)
+        st.audio(st.session_state.rain_sound, format="audio/mp3", autoplay=True)
 
    
+
 
 
 
