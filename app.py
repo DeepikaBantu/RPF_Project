@@ -175,23 +175,15 @@ if predict_btn:
     rf_pred = rf_model.predict(X_input)[0]
     xgb_pred = xgb_model.predict(X_input)[0]
 
-    max_pred = max(rf_pred, xgb_pred)
-
-    # -----------------------------
-    # DECISION + SOUND + ANIMATION
-    # -----------------------------
-    # Combine model prediction with yesterday rainfall for better decision
-    rf_pred = rf_model.predict(X_input)[0]
-    xgb_pred = xgb_model.predict(X_input)[0]
-
     # TAKE MAX OF BOTH MODELS
     max_pred = max(rf_pred, xgb_pred)
 
     # Combine model prediction with yesterday rainfall
     final_rain = max_pred + (0.3 * yesterday_rain)
 
-    # Decision + Message + Background + Sound
-     # Decision + Message + Background + Sound + Animation Type
+    # -----------------------------
+    # DECISION + MESSAGE + SOUND + ANIMATION
+    # -----------------------------
     if final_rain < 5:
         rainfall_type = "🌤 Light Rainfall"
         message = "😊 Weather is safe. Light rain expected."
@@ -214,19 +206,43 @@ if predict_btn:
         rain_effect = "heavy"
 
     # -----------------------------
+    # UPDATE BACKGROUND
+    # -----------------------------
+    st.markdown(f"""
+    <style>
+    .stApp {{
+        background-image: url("{bg_dynamic}");
+        background-size: cover;
+        background-position: center;
+    }}
+    </style>
+    """, unsafe_allow_html=True)
+
+    # -----------------------------
+    # SHOW RESULT
+    # -----------------------------
+    with col2:
+        result_placeholder.markdown(f"""
+        <div class="result-box">
+        🌲 Random Forest Prediction: {rf_pred:.2f} mm <br>
+        ⚡ XGBoost Prediction: {xgb_pred:.2f} mm <br><br>
+        👉 Final Result: <b>{rainfall_type}</b> <br><br>
+        💡 <b>Alert:</b> {message}
+        </div>
+        """, unsafe_allow_html=True)
+
+    # -----------------------------
     # SHOW RAIN ANIMATION
     # -----------------------------
-     st.markdown(rain_animation(rain_effect), unsafe_allow_html=True)
+    st.markdown(rain_animation(rain_effect), unsafe_allow_html=True)
 
     # -----------------------------
     # PLAY RAIN SOUND
     # -----------------------------
-     st.markdown("### 🔊 Rain Sound")
+    st.markdown("### 🔊 Rain Sound")
 
-     if st.button("▶️ Play Rain Sound"):
-          st.audio(rain_sound, format="audio/mp3")
-
-
+    if st.button("▶️ Play Rain Sound"):
+        st.audio(rain_sound, format="audio/mp3")
 
     # -----------------------------
     # SHOW RESULTS
@@ -240,6 +256,7 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
 
 
 
