@@ -42,15 +42,21 @@ bg_dynamic = "https://d2u0ktu8omkpf6.cloudfront.net/e0036137a0c69370e3e4909d4cd4
 # -----------------------------
 def rain_animation(level):
     if level == "light":
-        drops = 50
+        drops = 80
+        speed_min, speed_max = 1.2, 2.0
     elif level == "moderate":
-        drops = 120
-    else:
-        drops = 250
+        drops = 180          # 🔥 MORE DROPS
+        speed_min, speed_max = 0.8, 1.5
+    else:  # heavy
+        drops = 350          # 🔥 VERY HEAVY RAIN
+        speed_min, speed_max = 0.4, 1.0
 
     html = "<div class='rain'>"
     for i in range(drops):
-        html += "<div class='drop'></div>"
+        left = np.random.randint(0, 100)
+        duration = np.random.uniform(speed_min, speed_max)
+        delay = np.random.uniform(0, 2)
+        html += f"<div class='drop' style='left:{left}%; animation-duration:{duration}s; animation-delay:{delay}s;'></div>"
     html += "</div>"
 
     return f"""
@@ -67,20 +73,15 @@ def rain_animation(level):
     .drop {{
         position: absolute;
         bottom: 100%;
-        width: 2px;
-        height: 15px;
-        background: rgba(255,255,255,0.8);
+        width: 3px;
+        height: 18px;
+        background: rgba(255,255,255,0.9);
         animation: fall linear infinite;
     }}
     @keyframes fall {{
         to {{
             transform: translateY(110vh);
         }}
-    }}
-    .drop {{
-        left: {np.random.randint(0,100)}%;
-        animation-duration: {np.random.uniform(0.5,1.5)}s;
-        animation-delay: {np.random.uniform(0,2)}s;
     }}
     </style>
     {html}
@@ -205,7 +206,12 @@ if predict_btn:
     # -----------------------------
     # PLAY RAIN SOUND
     # -----------------------------
-    st.audio(rain_sound, autoplay=True)
+   st.markdown(f"""
+    <audio autoplay loop>
+        <source src="{rain_sound}" type="audio/mpeg">
+    </audio>
+    """, unsafe_allow_html=True)
+
 
     # -----------------------------
     # SHOW RESULTS
@@ -219,3 +225,4 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
