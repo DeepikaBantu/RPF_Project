@@ -24,8 +24,13 @@ if not os.path.exists(xgb_model_path):
     st.info("🔽 Downloading XGBoost model...")
     gdown.download(xgb_model_url, xgb_model_path, quiet=False)
 
-rf_model = joblib.load(rf_model_path)
-xgb_model = joblib.load(xgb_model_path)
+@st.cache_resource
+def load_models():
+    rf = joblib.load(rf_model_path)
+    xgb = joblib.load(xgb_model_path)
+    return rf, xgb
+
+rf_model, xgb_model = load_models()
 
 # -----------------------------
 # DEFAULT BACKGROUND
@@ -48,7 +53,7 @@ html, body, [class*="css"] {{
 }}
 
 h1 {{
-    color: white;
+   color: #FFD700;   /* Bright Yellow */
     text-align: center;
     font-size: 48px;
     font-weight: bold;
@@ -160,5 +165,6 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
 
 
