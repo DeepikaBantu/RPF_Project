@@ -191,23 +191,27 @@ if predict_btn:
     final_rain = max_pred + (0.3 * yesterday_rain)
 
     # Decision + Message + Background + Sound
+     # Decision + Message + Background + Sound + Animation Type
     if final_rain < 5:
         rainfall_type = "🌤 Light Rainfall"
         message = "😊 Weather is safe. Light rain expected."
         bg_dynamic = "https://d2u0ktu8omkpf6.cloudfront.net/e0036137a0c69370e3e4909d4cd47cbe621cab64cbe866b9.jpg"
         rain_sound = "https://www.soundjay.com/nature/rain-01.mp3"
+        rain_effect = "light"
 
     elif final_rain < 25:
         rainfall_type = "🌦 Moderate Rainfall"
         message = "☔ Bring an umbrella. Drive safely!"
         bg_dynamic = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4M0Kt3rSFoshV0ixydRW83zhRLTVTzi2suw&s"
         rain_sound = "https://www.soundjay.com/nature/rain-03.mp3"
+        rain_effect = "moderate"
 
     else:
         rainfall_type = "⛈ Heavy Rainfall"
         message = "🚨 Heavy rain! Avoid going outside and stay safe."
         bg_dynamic = "https://pragativadi.com/wp-content/uploads/2025/06/IMD-Issues-Orange-Alert-Thunderstorm-Heavy-Rainfall-Likely-in-Odisha-Districts-Over-Next-Four-Days.jpg"
         rain_sound = "https://www.soundjay.com/nature/thunder-01.mp3"
+        rain_effect = "heavy"
 
     # -----------------------------
     # SHOW RAIN ANIMATION
@@ -237,6 +241,7 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
 
 
 
