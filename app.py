@@ -4,6 +4,8 @@ import pandas as pd
 import joblib
 import gdown
 import os
+import matplotlib.pyplot as plt
+
 
 st.set_page_config(page_title="Rainfall Prediction App", layout="wide")
 
@@ -165,6 +167,7 @@ if predict_btn:
 
     # Show results in RIGHT PANEL
     with col2:
+    # Result box
         result_placeholder.markdown(f"""
         <div class="result-box">
         🌲 Random Forest Prediction: {rf_pred:.2f} mm <br>
@@ -173,6 +176,35 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
+    # -----------------------------
+    # 🌧 RAINFALL METER BAR
+    # -----------------------------
+        st.markdown("### 🌧 Rainfall Intensity Meter")
+
+    # limit scale to 0–100 mm
+        meter_value = min(int(final_rain), 100)
+
+        st.progress(meter_value)
+
+        st.write(f"**Estimated Rainfall Level:** {final_rain:.2f} mm")
+
+    # -----------------------------
+    # 📊 PREDICTION GRAPH
+    # -----------------------------
+        st.markdown("### 📊 Model Prediction Comparison")
+
+        fig, ax = plt.subplots(figsize=(4, 3))
+
+        models = ["Random Forest", "XGBoost"]
+        values = [rf_pred, xgb_pred]
+
+        ax.bar(models, values)
+        ax.set_ylabel("Rainfall (mm)")
+        ax.set_title("Rainfall Prediction by Models")
+
+        st.pyplot(fig)
+
 
 
 
