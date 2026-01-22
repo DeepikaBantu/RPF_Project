@@ -4,8 +4,6 @@ import pandas as pd
 import joblib
 import gdown
 import os
-import matplotlib.pyplot as plt
-
 
 st.set_page_config(page_title="Rainfall Prediction App", layout="wide")
 
@@ -40,6 +38,55 @@ rf_model, xgb_model = load_models()
 bg_dynamic = "https://d2u0ktu8omkpf6.cloudfront.net/e0036137a0c69370e3e4909d4cd47cbe621cab64cbe866b9.jpg"
 
 # -----------------------------
+# RAIN ANIMATION FUNCTION
+# -----------------------------
+def rain_animation(level):
+    if level == "light":
+        drops = 50
+    elif level == "moderate":
+        drops = 120
+    else:
+        drops = 250
+
+    html = "<div class='rain'>"
+    for i in range(drops):
+        html += "<div class='drop'></div>"
+    html += "</div>"
+
+    return f"""
+    <style>
+    .rain {{
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 1;
+    }}
+    .drop {{
+        position: absolute;
+        bottom: 100%;
+        width: 2px;
+        height: 15px;
+        background: rgba(255,255,255,0.8);
+        animation: fall linear infinite;
+    }}
+    @keyframes fall {{
+        to {{
+            transform: translateY(110vh);
+        }}
+    }}
+    .drop {{
+        left: {np.random.randint(0,100)}%;
+        animation-duration: {np.random.uniform(0.5,1.5)}s;
+        animation-delay: {np.random.uniform(0,2)}s;
+    }}
+    </style>
+    {html}
+    """
+
+# -----------------------------
 # CUSTOM STYLE
 # -----------------------------
 st.markdown(f"""
@@ -55,7 +102,7 @@ html, body, [class*="css"] {{
 }}
 
 h1 {{
-   color: #FFD700;   /* Bright Yellow */
+    color: #0B2C6B;
     text-align: center;
     font-size: 48px;
     font-weight: bold;
@@ -64,7 +111,6 @@ h1 {{
     border-radius: 12px;
     text-shadow: 2px 2px 6px black;
 }}
-
 
 label {{
     font-size: 22px !important;
@@ -97,13 +143,7 @@ label {{
 # -----------------------------
 # TITLE
 # -----------------------------
-st.markdown(
-    "<h1 style='color:#0B2C6B; text-align:center; font-size:48px; font-weight:bold; "
-    "background-color: rgba(0,0,0,0.75); padding:15px; border-radius:12px; "
-    "text-shadow: 2px 2px 6px black;'>🌧 RAINFALL PREDICTION APP</h1>",
-    unsafe_allow_html=True
-)
-
+st.markdown("<h1>🌧 RAINFALL PREDICTION APP</h1>", unsafe_allow_html=True)
 
 # -----------------------------
 # LAYOUT
@@ -136,38 +176,41 @@ if predict_btn:
 
     max_pred = max(rf_pred, xgb_pred)
 
-   # Combine model + yesterday rain (realistic logic)
-    final_rain = max_pred + (0.4 * yesterday_rain)
-
-    if final_rain < 10:
+    # -----------------------------
+    # DECISION + SOUND + ANIMATION
+    # -----------------------------
+    if max_pred < 2.0:
         rainfall_type = "🌤 Light Rainfall"
         message = "😊 Weather is safe. Light rain expected."
-        bg_dynamic = "https://d2u0ktu8omkpf6.cloudfront.net/e0036137a0c69370e3e4909d4cd47cbe621cab64cbe866b9.jpg"
+        rain_effect = "light"
+        rain_sound = "https://www.soundjay.com/nature/rain-01.mp3"
 
-    elif final_rain < 40:
+    elif max_pred < 3.5:
         rainfall_type = "🌦 Moderate Rainfall"
         message = "☔ Bring an umbrella. Drive safely!"
-        bg_dynamic = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4M0Kt3rSFoshV0ixydRW83zhRLTVTzi2suw&s"
+        rain_effect = "moderate"
+        rain_sound = "https://www.soundjay.com/nature/rain-03.mp3"
 
     else:
         rainfall_type = "⛈ Heavy Rainfall"
         message = "🚨 Heavy rain! Avoid going outside and stay safe."
-        bg_dynamic = "https://pragativadi.com/wp-content/uploads/2025/06/IMD-Issues-Orange-Alert-Thunderstorm-Heavy-Rainfall-Likely-in-Odisha-Districts-Over-Next-Four-Days.jpg"
+        rain_effect = "heavy"
+        rain_sound = "https://www.soundjay.com/nature/thunder-01.mp3"
 
-    # Update background dynamically
-    st.markdown(f"""
-    <style>
-    .stApp {{
-        background-image: url("{bg_dynamic}");
-        background-size: cover;
-        background-position: center;
-    }}
-    </style>
-    """, unsafe_allow_html=True)
+    # -----------------------------
+    # SHOW RAIN ANIMATION
+    # -----------------------------
+    st.markdown(rain_animation(rain_effect), unsafe_allow_html=True)
 
-    # Show results in RIGHT PANEL
+    # -----------------------------
+    # PLAY RAIN SOUND
+    # -----------------------------
+    st.audio(rain_sound, autoplay=True)
+
+    # -----------------------------
+    # SHOW RESULTS
+    # -----------------------------
     with col2:
-    # Result box
         result_placeholder.markdown(f"""
         <div class="result-box">
         🌲 Random Forest Prediction: {rf_pred:.2f} mm <br>
@@ -176,27 +219,3 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
-
-    # -----------------------------
-    # 🌧 RAINFALL METER BAR
-    # -----------------------------
-        st.markdown("### 🌧 Rainfall Intensity Meter")
-
-    # limit scale to 0–100 mm
-        meter_value = min(int(final_rain), 100)
-
-        st.progress(meter_value)
-
-        st.write(f"**Estimated Rainfall Level:** {final_rain:.2f} mm")
-
-   
-
-
-
-
-
-
-
-
-
-
