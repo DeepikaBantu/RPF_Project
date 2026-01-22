@@ -189,21 +189,8 @@ if predict_btn:
 
         st.write(f"**Estimated Rainfall Level:** {final_rain:.2f} mm")
 
-    # -----------------------------
-    # 📊 PREDICTION GRAPH
-    # -----------------------------
-        st.markdown("### 📊 Model Prediction Comparison")
+   
 
-        fig, ax = plt.subplots(figsize=(4, 3))
-
-        models = ["Random Forest", "XGBoost"]
-        values = [rf_pred, xgb_pred]
-
-        ax.bar(models, values)
-        ax.set_ylabel("Rainfall (mm)")
-        ax.set_title("Rainfall Prediction by Models")
-
-        st.pyplot(fig)
 
 
 
