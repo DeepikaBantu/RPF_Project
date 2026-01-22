@@ -95,7 +95,13 @@ label {{
 # -----------------------------
 # TITLE
 # -----------------------------
-st.markdown("<h1>🌧 RAINFALL PREDICTION APP</h1>", unsafe_allow_html=True)
+st.markdown(
+    "<h1 style='color:#0B2C6B; text-align:center; font-size:48px; font-weight:bold; "
+    "background-color: rgba(0,0,0,0.75); padding:15px; border-radius:12px; "
+    "text-shadow: 2px 2px 6px black;'>🌧 RAINFALL PREDICTION APP</h1>",
+    unsafe_allow_html=True
+)
+
 
 # -----------------------------
 # LAYOUT
@@ -165,6 +171,7 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
 
 
 
