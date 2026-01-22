@@ -106,7 +106,7 @@ html, body, [class*="css"] {{
 }}
 
 h1 {{
-    color: #B8860B;
+    color: #B8860B !important;
     text-align: center;
     font-size: 48px;
     font-weight: bold;
@@ -268,6 +268,7 @@ if predict_btn:
         st.audio(st.session_state.rain_sound, format="audio/mp3", autoplay=True)
 
    
+
 
 
 
