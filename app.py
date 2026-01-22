@@ -5,6 +5,9 @@ import joblib
 import gdown
 import os
 
+if "predicted" not in st.session_state:
+    st.session_state.predicted = False
+
 st.set_page_config(page_title="Rainfall Prediction App", layout="wide")
 
 # -----------------------------
@@ -204,6 +207,13 @@ if predict_btn:
         bg_dynamic = "https://pragativadi.com/wp-content/uploads/2025/06/IMD-Issues-Orange-Alert-Thunderstorm-Heavy-Rainfall-Likely-in-Odisha-Districts-Over-Next-Four-Days.jpg"
         rain_sound = "https://www.soundjay.com/nature/thunder-01.mp3"
         rain_effect = "heavy"
+    st.session_state.predicted = True
+    st.session_state.rf_pred = rf_pred
+    st.session_state.xgb_pred = xgb_pred
+    st.session_state.rainfall_type = rainfall_type
+    st.session_state.message = message
+    st.session_state.rain_sound = rain_sound
+    st.session_state.rain_effect = rain_effect
 
     # -----------------------------
     # UPDATE BACKGROUND
@@ -241,22 +251,23 @@ if predict_btn:
     # -----------------------------
     st.markdown("### 🔊 Rain Sound")
 
-    if st.button("▶️ Play Rain Sound"):
-        st.audio(rain_sound, format="audio/mp3")
+    if st.session_state.predicted:
 
-    # -----------------------------
-    # SHOW RESULTS
-    # -----------------------------
     with col2:
         result_placeholder.markdown(f"""
         <div class="result-box">
-        🌲 Random Forest Prediction: {rf_pred:.2f} mm <br>
-        ⚡ XGBoost Prediction: {xgb_pred:.2f} mm <br><br>
-        👉 Final Result: <b>{rainfall_type}</b> <br><br>
-        💡 <b>Alert:</b> {message}
+        🌲 Random Forest Prediction: {st.session_state.rf_pred:.2f} mm <br>
+        ⚡ XGBoost Prediction: {st.session_state.xgb_pred:.2f} mm <br><br>
+        👉 Final Result: <b>{st.session_state.rainfall_type}</b> <br><br>
+        💡 <b>Alert:</b> {st.session_state.message}
         </div>
         """, unsafe_allow_html=True)
 
+    st.markdown(rain_animation(st.session_state.rain_effect), unsafe_allow_html=True)
+
+    st.audio(st.session_state.rain_sound, format="audio/mp3", autoplay=True)
+
+   
 
 
 
