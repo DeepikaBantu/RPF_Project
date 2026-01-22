@@ -221,9 +221,9 @@ if predict_btn:
     # -----------------------------
     # PLAY RAIN SOUND
     # -----------------------------
-     st.markdown("### 🔊 Rain Sound")
+    st.markdown("### 🔊 Rain Sound")
 
-     if st.button("▶️ Play Rain Sound"):
+    if st.button("▶️ Play Rain Sound"):
         st.audio(rain_sound, format="audio/mp3")
 
 
@@ -240,6 +240,7 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
 
 
 
