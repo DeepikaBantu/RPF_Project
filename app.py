@@ -180,23 +180,27 @@ if predict_btn:
     # -----------------------------
     # DECISION + SOUND + ANIMATION
     # -----------------------------
-    if max_pred < 2.0:
-        rainfall_type = "🌤 Light Rainfall"
-        message = "😊 Weather is safe. Light rain expected."
-        rain_effect = "light"
-        rain_sound = "https://www.soundjay.com/nature/rain-01.mp3"
+    # Combine model prediction with yesterday rainfall for better decision
+final_rain = max_pred + (0.3 * yesterday_rain)
 
-    elif max_pred < 3.5:
-        rainfall_type = "🌦 Moderate Rainfall"
-        message = "☔ Bring an umbrella. Drive safely!"
-        rain_effect = "moderate"
-        rain_sound = "https://www.soundjay.com/nature/rain-03.mp3"
+# Decision + Message + Background
+if final_rain < 5:
+    rainfall_type = "🌤 Light Rainfall"
+    message = "😊 Weather is safe. Light rain expected."
+    rain_level = "light"
+    rain_sound = "https://www.soundjay.com/nature/rain-01.mp3"
 
-    else:
-        rainfall_type = "⛈ Heavy Rainfall"
-        message = "🚨 Heavy rain! Avoid going outside and stay safe."
-        rain_effect = "heavy"
-        rain_sound = "https://www.soundjay.com/nature/thunder-01.mp3"
+elif final_rain < 25:
+    rainfall_type = "🌦 Moderate Rainfall"
+    message = "☔ Bring an umbrella. Drive safely!"
+    rain_level = "moderate"
+    rain_sound = "https://www.soundjay.com/nature/rain-03.mp3"
+
+else:
+    rainfall_type = "⛈ Heavy Rainfall"
+    message = "🚨 Heavy rain! Avoid going outside and stay safe."
+    rain_level = "heavy"
+    rain_sound = "https://www.soundjay.com/nature/thunder-01.mp3"
 
     # -----------------------------
     # SHOW RAIN ANIMATION
@@ -226,6 +230,7 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
 
 
 
