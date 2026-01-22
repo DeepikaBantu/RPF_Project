@@ -45,7 +45,7 @@ def rain_animation(level):
         drops = 80
         speed_min, speed_max = 1.2, 2.0
     elif level == "moderate":
-        drops = 180          # 🔥 MORE DROPS
+        drops = 150          # 🔥 MORE DROPS
         speed_min, speed_max = 0.8, 1.5
     else:  # heavy
         drops = 350          # 🔥 VERY HEAVY RAIN
@@ -221,11 +221,10 @@ if predict_btn:
     # -----------------------------
     # PLAY RAIN SOUND
     # -----------------------------
-    st.markdown(f"""
-    <audio autoplay loop>
-        <source src="{rain_sound}" type="audio/mpeg">
-    </audio>
-    """, unsafe_allow_html=True)
+     st.markdown("### 🔊 Rain Sound")
+
+     if st.button("▶️ Play Rain Sound"):
+        st.audio(rain_sound, format="audio/mp3")
 
 
 
@@ -241,6 +240,7 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
 
 
 
