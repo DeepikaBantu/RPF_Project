@@ -206,11 +206,12 @@ if predict_btn:
     # -----------------------------
     # PLAY RAIN SOUND
     # -----------------------------
-   st.markdown(f"""
-    <audio autoplay loop>
-        <source src="{rain_sound}" type="audio/mpeg">
-    </audio>
-    """, unsafe_allow_html=True)
+     st.markdown(f"""
+<audio autoplay loop>
+    <source src="{rain_sound}" type="audio/mpeg">
+</audio>
+""", unsafe_allow_html=True)
+
 
 
     # -----------------------------
@@ -225,4 +226,5 @@ if predict_btn:
         💡 <b>Alert:</b> {message}
         </div>
         """, unsafe_allow_html=True)
+
 
