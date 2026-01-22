@@ -45,10 +45,10 @@ bg_dynamic = "https://d2u0ktu8omkpf6.cloudfront.net/e0036137a0c69370e3e4909d4cd4
 # -----------------------------
 def rain_animation(level):
     if level == "light":
-        drops = 80
+        drops = 40
         speed_min, speed_max = 1.2, 2.0
     elif level == "moderate":
-        drops = 150          # 🔥 MORE DROPS
+        drops = 100          # 🔥 MORE DROPS
         speed_min, speed_max = 0.8, 1.5
     else:  # heavy
         drops = 350          # 🔥 VERY HEAVY RAIN
@@ -106,7 +106,7 @@ html, body, [class*="css"] {{
 }}
 
 h1 {{
-    color: #0B2C6B;
+    color: #B8860B;
     text-align: center;
     font-size: 48px;
     font-weight: bold;
@@ -268,6 +268,7 @@ if predict_btn:
         st.audio(st.session_state.rain_sound, format="audio/mp3", autoplay=True)
 
    
+
 
 
 
